@@ -16,7 +16,6 @@ type QueueClient interface {
 }
 
 func GetQueueClient() (QueueClient, error) {
-	// teste
 	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
