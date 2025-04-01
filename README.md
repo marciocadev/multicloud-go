@@ -1,8 +1,7 @@
 ## Variáveis de ambiente 
 ### AWS
-* AWS_REGION
-* QUEUE_URL
-* CLOUD_PROVIDER = "AWS"
+* Queue -> QUEUE_URL, AWS_REGION, CLOUD_PROVIDER = "AWS"
+* Topic -> TOPIC_ARN, AWS_REGION, CLOUD_PROVIDER = "AWS"
 
 ## Gerar Tag
 * git push

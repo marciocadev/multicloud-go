@@ -6,38 +6,37 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/sqs"
-
+	"github.com/aws/aws-sdk-go-v2/service/sns"
 	q "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
-type QueueClient interface {
-	SendMessage(ctx context.Context, messageBody string) error
+type TopicClient interface {
+	Publish(ctx context.Context, messageBody string) error
 }
 
-func GetQueueClient() (QueueClient, error) {
+func GetTopicClient() (TopicClient, error) {
 	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
-		// AWS SQS
+		// AWS SNS
 		cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("AWS_REGION")))
 		if err != nil {
 			return nil, fmt.Errorf("erro ao carregar configuração AWS: %w", err)
 		}
-		client := sqs.NewFromConfig(cfg)
-		return &q.SQSClient{
+		client := sns.NewFromConfig(cfg)
+		return &q.SNSClient{
 			Client:   client,
-			QueueURL: os.Getenv("QUEUE_URL"),
+			TopicARN: os.Getenv("TOPIC_ARN"),
 		}, nil
 	case "GCP":
 		// GCP Pub/Sub
-		return nil, fmt.Errorf("GCP QueueClient not implemented")
+		return nil, fmt.Errorf("GCP TopicClient not implemented")
 	case "AZURE":
-		// Azure Queue Storage
-		return nil, fmt.Errorf("AZURE QueueClient not implemented")
+		// Azure Service Bus
+		return nil, fmt.Errorf("AZURE TopicClient not implemented")
 	case "OCI":
-		// OCI Queue
-		return nil, fmt.Errorf("OCI QueueClient not implemented")
+		// OCI Topic
+		return nil, fmt.Errorf("OCI TopicClient not implemented")
 	default:
 		return nil, fmt.Errorf("unsupported cloud provider: %s", cloud)
 	}
