@@ -26,7 +26,7 @@ func GetTopicClient() (TopicClient, error) {
 		client := sns.NewFromConfig(cfg)
 		return &q.SNSClient{
 			Client:   client,
-			TopicARN: os.Getenv("TOPIC_ARN"),
+			TopicARN: os.Getenv("TOPIC_ID"),
 		}, nil
 	case "GCP":
 		// GCP Pub/Sub

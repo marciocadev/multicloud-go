@@ -27,7 +27,7 @@ func GetQueueClient() (QueueClient, error) {
 		client := sqs.NewFromConfig(cfg)
 		return &q.SQSClient{
 			Client:   client,
-			QueueURL: os.Getenv("QUEUE_URL"),
+			QueueURL: os.Getenv("QUEUE_ID"),
 		}, nil
 	case "GCP":
 		// GCP Pub/Sub
