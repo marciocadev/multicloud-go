@@ -12,8 +12,12 @@ import (
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
-type QueueEvent struct {
-	events.SQSEvent
+cloud := os.Getenv("CLOUD_PROVIDER")
+switch cloud {
+case "AWS":
+	type QueueEvent struct {
+		events.SQSEvent
+	}
 }
 
 type QueueClient interface {
@@ -21,7 +25,6 @@ type QueueClient interface {
 }
 
 func GetQueueClient() (QueueClient, error) {
-	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
 		// AWS SQS

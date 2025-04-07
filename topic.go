@@ -12,8 +12,12 @@ import (
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
-type TopicEvent struct {
-	events.SNSEvent
+cloud := os.Getenv("CLOUD_PROVIDER")
+switch cloud {
+case "AWS":
+	type TopicEvent struct {
+		events.SNSEvent
+	}
 }
 
 type TopicClient interface {
@@ -21,7 +25,6 @@ type TopicClient interface {
 }
 
 func GetTopicClient() (TopicClient, error) {
-	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
 		// AWS SNS
