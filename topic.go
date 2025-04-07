@@ -12,7 +12,7 @@ import (
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
-type TopicEvent interface {
+type TopicEvent struct {
 	events.SNSEvent
 }
 

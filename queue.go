@@ -12,7 +12,7 @@ import (
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
-type QueueEvent interface {
+type QueueEvent struct {
 	events.SQSEvent
 }
 
