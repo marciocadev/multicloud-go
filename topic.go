@@ -7,8 +7,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
-	q "github.com/marciocadev/multicloud-go/cloud/aws"
+
+	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
+
+type TopicEvent interface {
+	events.SNSEvent
+}
 
 type TopicClient interface {
 	Publish(ctx context.Context, messageBody string) error
@@ -24,7 +29,7 @@ func GetTopicClient() (TopicClient, error) {
 			return nil, fmt.Errorf("erro ao carregar configuração AWS: %w", err)
 		}
 		client := sns.NewFromConfig(cfg)
-		return &q.SNSClient{
+		return &aws.SNSClient{
 			Client:   client,
 			TopicARN: os.Getenv("TOPIC_ID"),
 		}, nil

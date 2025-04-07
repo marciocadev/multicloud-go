@@ -8,8 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 
-	q "github.com/marciocadev/multicloud-go/cloud/aws"
+	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
+
+type QueueEvent interface {
+	events.SQSEvent
+}
 
 type QueueClient interface {
 	SendMessage(ctx context.Context, messageBody string) error
@@ -25,7 +29,7 @@ func GetQueueClient() (QueueClient, error) {
 			return nil, fmt.Errorf("erro ao carregar configuração AWS: %w", err)
 		}
 		client := sqs.NewFromConfig(cfg)
-		return &q.SQSClient{
+		return &aws.SQSClient{
 			Client:   client,
 			QueueURL: os.Getenv("QUEUE_ID"),
 		}, nil
