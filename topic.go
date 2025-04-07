@@ -1,4 +1,4 @@
-package cloud
+package topic
 
 import (
 	"context"
@@ -6,25 +6,17 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
-
-cloud := os.Getenv("CLOUD_PROVIDER")
-switch cloud {
-case "AWS":
-	type TopicEvent struct {
-		events.SNSEvent
-	}
-}
 
 type TopicClient interface {
 	Publish(ctx context.Context, messageBody string) error
 }
 
 func GetTopicClient() (TopicClient, error) {
+	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
 		// AWS SNS

@@ -1,4 +1,4 @@
-package cloud
+package queue
 
 import (
 	"context"
@@ -6,25 +6,17 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
-
+	
 	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
-
-cloud := os.Getenv("CLOUD_PROVIDER")
-switch cloud {
-case "AWS":
-	type QueueEvent struct {
-		events.SQSEvent
-	}
-}
 
 type QueueClient interface {
 	SendMessage(ctx context.Context, messageBody string) error
 }
 
 func GetQueueClient() (QueueClient, error) {
+	cloud := os.Getenv("CLOUD_PROVIDER")
 	switch cloud {
 	case "AWS":
 		// AWS SQS
