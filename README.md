@@ -4,6 +4,8 @@
 * Topic -> TOPIC_ID (infoarmar o ARN do topic), AWS_REGION, CLOUD_PROVIDER = "AWS"
 
 ## Gerar Tag
+* git add .
+* git commit -m 'update'
 * git push
-* git tag v0.0.7
-* git push origin v0.0.7
+* git tag v0.0.21
+* git push origin v0.0.21
