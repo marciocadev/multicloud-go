@@ -1,4 +1,4 @@
-package queue
+package events
 
 import (
 	cloud "github.com/marciocadev/multicloud-go/cloud"
