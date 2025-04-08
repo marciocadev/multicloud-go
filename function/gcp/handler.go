@@ -7,7 +7,8 @@ import (
 	"time"
 
 	"github.com/marciocadev/multicloud-go/cloud"
-	"github.com/marciocadev/multicloud-go/handler"
+	"github.com/marciocadev/multicloud-go/function/event"
+	"github.com/marciocadev/multicloud-go/function/handler"
 )
 
 // GCPWrapper implementa o wrapper para Google Cloud Functions
@@ -30,7 +31,7 @@ func (w *GCPWrapper) Handle(ctx context.Context, event interface{}) (interface{}
 	return w.convertToGCPResponse(resp)
 }
 
-func (w *GCPWrapper) parseGCPEvent(rawEvent interface{}) (*cloud.CloudRequest, error) {
+func (w *GCPWrapper) parseGCPEvent(rawEvent interface{}) (*event.CloudRequest, error) {
 	// Estrutura para eventos HTTP do GCP
 	type GCPHTTPRequest struct {
 		Method      string            `json:"method"`
@@ -66,10 +67,10 @@ func (w *GCPWrapper) parseGCPEvent(rawEvent interface{}) (*cloud.CloudRequest, e
 	// Tentar parse como HTTP request
 	var httpReq GCPHTTPRequest
 	if err := json.Unmarshal(eventJSON, &httpReq); err == nil && httpReq.Method != "" {
-		return &cloud.CloudRequest{
+		return &event.CloudRequest{
 			Provider:  cloud.GCP,
-			EventType: cloud.HTTPEvent,
-			HTTPRequest: &cloud.HTTPRequest{
+			EventType: event.HTTPEvent,
+			HTTPRequest: &event.HTTPRequest{
 				Method:      httpReq.Method,
 				Path:        httpReq.URL,
 				Headers:     httpReq.Headers,
@@ -86,10 +87,10 @@ func (w *GCPWrapper) parseGCPEvent(rawEvent interface{}) (*cloud.CloudRequest, e
 	if err := json.Unmarshal(eventJSON, &pubsubMsg); err == nil && pubsubMsg.MessageID != "" {
 		publishTime, _ := time.Parse(time.RFC3339, pubsubMsg.PublishTime)
 
-		return &cloud.CloudRequest{
+		return &event.CloudRequest{
 			Provider:  cloud.GCP,
-			EventType: cloud.MessageEvent,
-			Message: &cloud.CloudMessage{
+			EventType: event.MessageEvent,
+			Message: &event.CloudMessage{
 				ID:          pubsubMsg.MessageID,
 				Body:        pubsubMsg.Data,
 				Attributes:  pubsubMsg.Attributes,
@@ -102,7 +103,7 @@ func (w *GCPWrapper) parseGCPEvent(rawEvent interface{}) (*cloud.CloudRequest, e
 	return nil, fmt.Errorf("tipo de evento GCP não suportado")
 }
 
-func (w *GCPWrapper) convertToGCPResponse(resp *cloud.CloudResponse) (interface{}, error) {
+func (w *GCPWrapper) convertToGCPResponse(resp *event.CloudResponse) (interface{}, error) {
 	if resp == nil {
 		return nil, nil
 	}

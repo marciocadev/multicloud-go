@@ -1,4 +1,4 @@
-package multicloud
+package queue
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 
 	"github.com/marciocadev/multicloud-go/cloud"
-	aws "github.com/marciocadev/multicloud-go/cloud/aws"
+	aws "github.com/marciocadev/multicloud-go/queue/aws"
 )
 
 type QueueClient interface {

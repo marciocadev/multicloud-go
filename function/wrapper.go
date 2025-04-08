@@ -1,12 +1,12 @@
-package wrapper
+package function
 
 import (
 	"context"
 	"os"
 
 	"github.com/marciocadev/multicloud-go/cloud"
-	"github.com/marciocadev/multicloud-go/cloud/aws"
-	"github.com/marciocadev/multicloud-go/handler"
+	"github.com/marciocadev/multicloud-go/function/aws"
+	"github.com/marciocadev/multicloud-go/function/handler"
 )
 
 // Wrapper é a interface para wrappers específicos de cada provedor

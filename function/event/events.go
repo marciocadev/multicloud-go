@@ -1,6 +1,10 @@
-package cloud
+package event
 
-import "time"
+import (
+	"time"
+
+	"github.com/marciocadev/multicloud-go/cloud"
+)
 
 // EventType representa o tipo de evento serverless
 type EventType string
@@ -31,7 +35,7 @@ type CloudMessage struct {
 
 // CloudRequest representa uma requisição normalizada independente do provedor
 type CloudRequest struct {
-	Provider    CloudProvider
+	Provider    cloud.CloudProvider
 	EventType   EventType
 	HTTPRequest *HTTPRequest  // Preenchido se for um evento HTTP
 	Message     *CloudMessage // Preenchido se for um evento de mensagem
