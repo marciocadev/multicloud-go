@@ -26,9 +26,9 @@ func NewQueueEvent(rawEvent interface{}) (*QueueEvent, error) {
 	provider := cloud.CloudProvider(os.Getenv("CLOUD_PROVIDER"))
 	
 	switch provider {
-	case AWS:
+	case cloud.AWS:
 		return aws.ParseAWSEvent(rawEvent)
-	case GCP:
+	case cloud.GCP:
 		// return parseGCPEvent(rawEvent)
 	default:
 		return nil, fmt.Errorf("provedor de nuvem não suportado: %s", provider)
