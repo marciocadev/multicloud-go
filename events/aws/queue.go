@@ -25,6 +25,13 @@ type QueueEvent struct {
 }
 
 func ParseAWSEvent(rawEvent interface{}) (*QueueEvent, error) {
+
+	if sqsEvent, ok := rawEvent.(events.SQSEvent); ok {
+		fmt.Println("A variável é do tipo SQSEvent:", sqsEvent)
+	} else {
+		fmt.Println("A variável não é do tipo SQSEvent")
+	}
+
 	switch evt := rawEvent.(type) {
 	case events.SQSEvent:
 		messages := make([]QueueMessage, len(evt.Records))
