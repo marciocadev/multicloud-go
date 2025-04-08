@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 
-	aws "github.com/marciocadev/multicloud-go/aws"
 	"github.com/marciocadev/multicloud-go/cloud"
+	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
 type TopicClient interface {
