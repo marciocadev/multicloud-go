@@ -10,17 +10,8 @@ import (
 	"github.com/marciocadev/multicloud-go/function/event"
 )
 
-// func RunFunction(handlerFunc interface{}) {
-// 	myFunc := func(ctx context.Context, event interface{}) (interface{}, error) {
-// 		wrapper := NewWrapper(handlerFunc.(handler.HandlerFunc))
-// 		return wrapper.Handle(ctx, event)
-// 	}
-
-// 	lambda.Start(myFunc)
-// }
-
-// RunFunction inicia a função serverless
-func RunFunction(h func(context.Context, *event.CloudRequest) (*event.CloudResponse, error)) {
+// Run inicia a função serverless
+func Run(h func(context.Context, *event.CloudRequest) (*event.CloudResponse, error)) {
 
 	wrapper := func(ctx context.Context, rawEvent interface{}) (interface{}, error) {
 		provider := cloud.CloudProvider(os.Getenv("CLOUD_PROVIDER"))
