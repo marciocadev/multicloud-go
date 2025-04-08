@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 
-	cloud "github.com/marciocadev/multicloud-go/cloud"
 	aws "github.com/marciocadev/multicloud-go/aws"
 )
 
@@ -17,9 +16,9 @@ type TopicClient interface {
 }
 
 func GetTopicClient() (TopicClient, error) {
-	provider := cloud.CloudProvider(os.Getenv("CLOUD_PROVIDER"))
-	switch provider {
-	case cloud.AWS:
+	cloud := os.Getenv("CLOUD_PROVIDER")
+	switch cloud {
+	case "AWS":
 		// AWS SNS
 		cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("AWS_REGION")))
 		if err != nil {
@@ -30,13 +29,13 @@ func GetTopicClient() (TopicClient, error) {
 			Client:   client,
 			TopicARN: os.Getenv("TOPIC_ID"),
 		}, nil
-	case cloud.GCP:
+	case "GCP":
 		// GCP Pub/Sub
 		return nil, fmt.Errorf("GCP TopicClient not implemented")
-	case cloud.AZURE:
+	case "AZURE":
 		// Azure Service Bus
 		return nil, fmt.Errorf("AZURE TopicClient not implemented")
-	case cloud.OCI:
+	case "OCI":
 		// OCI Topic
 		return nil, fmt.Errorf("OCI TopicClient not implemented")
 	default:

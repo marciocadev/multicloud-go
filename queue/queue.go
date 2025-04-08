@@ -8,8 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	
-	cloud "github.com/marciocadev/multicloud-go/cloud"
-	aws "github.com/marciocadev/multicloud-go/aws"
+	aws "github.com/marciocadev/multicloud-go/cloud/aws"
 )
 
 type QueueClient interface {
@@ -17,9 +16,9 @@ type QueueClient interface {
 }
 
 func GetQueueClient() (QueueClient, error) {
-	provider := cloud.CloudProvider(os.Getenv("CLOUD_PROVIDER"))
-	switch provider {
-	case cloud.AWS:
+	cloud := os.Getenv("CLOUD_PROVIDER")
+	switch cloud {
+	case "AWS":
 		// AWS SQS
 		cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(os.Getenv("AWS_REGION")))
 		if err != nil {
@@ -30,13 +29,13 @@ func GetQueueClient() (QueueClient, error) {
 			Client:   client,
 			QueueURL: os.Getenv("QUEUE_ID"),
 		}, nil
-	case cloud.GCP:
+	case "GCP":
 		// GCP Pub/Sub
 		return nil, fmt.Errorf("GCP QueueClient not implemented")
-	case cloud.AZURE:
+	case "AZURE":
 		// Azure Queue Storage
 		return nil, fmt.Errorf("AZURE QueueClient not implemented")
-	case cloud.OCI:
+	case "OCI":
 		// OCI Queue
 		return nil, fmt.Errorf("OCI QueueClient not implemented")
 	default:
