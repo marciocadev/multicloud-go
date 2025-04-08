@@ -4,8 +4,8 @@ package cloud
 type CloudProvider string
 
 const (
-	AWS CloudProvider = "AWS"
-	GCP CloudProvider = "GCP"
+	AWS   CloudProvider = "AWS"
+	GCP   CloudProvider = "GCP"
 	AZURE CloudProvider = "AZURE"
-	OCI CloudProvider = "OCI"
+	OCI   CloudProvider = "OCI"
 )

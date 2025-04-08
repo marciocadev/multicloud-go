@@ -1,18 +1,35 @@
 package aws
 
 import (
-	"github.com/aws/aws-lambda-go/events"
+	"fmt"
+	"strconv"
+	"time"
 
-	cloud "github.com/marciocadev/multicloud-go/cloud"
-	queue "github.com/marciocadev/multicloud-go/events/queue"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/marciocadev/multicloud-go/cloud"
 )
 
-func ParseAWSEvent(rawEvent interface{}) (*queue.QueueEvent, error) {
+// QueueMessage representa uma mensagem genérica que funciona para ambos os provedores
+type QueueMessage struct {
+	ID          string            // ID da mensagem
+	Body        string            // Corpo da mensagem
+	Attributes  map[string]string // Atributos da mensagem
+	PublishTime time.Time         // Hora de publicação
+	Source      string            // Origem da mensagem (tópico/fila)
+}
+
+// QueueEvent representa um evento que pode vir de qualquer provedor
+type QueueEvent struct {
+	Provider cloud.CloudProvider
+	Messages []QueueMessage
+}
+
+func ParseAWSEvent(rawEvent interface{}) (*QueueEvent, error) {
 	switch evt := rawEvent.(type) {
 	case events.SQSEvent:
-		messages := make([]queue.QueueMessage, len(evt.Records))
+		messages := make([]QueueMessage, len(evt.Records))
 		for i, record := range evt.Records {
-			messages[i] = queue.QueueMessage{
+			messages[i] = QueueMessage{
 				ID:          record.MessageId,
 				Body:        record.Body,
 				Attributes:  record.Attributes,
@@ -20,11 +37,11 @@ func ParseAWSEvent(rawEvent interface{}) (*queue.QueueEvent, error) {
 				Source:      record.EventSourceARN,
 			}
 		}
-		return &queue.QueueEvent{
+		return &QueueEvent{
 			Provider: cloud.AWS,
 			Messages: messages,
 		}, nil
-		
+
 	default:
 		return nil, fmt.Errorf("tipo de evento AWS não suportado: %T", rawEvent)
 	}
